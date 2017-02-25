@@ -1,0 +1,22 @@
+version: '2'
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+      - mongodata:/data/configdb
+  php:
+    build: ./php
+    ports:
+      - '8080:80'
+    volumes:
+      - ./src:/var/www/html
+      - ./apache:/etc/apache2/sites-enabled/
+    depends_on:
+      - mongo
+    links:
+      - mongo:db
+volumes:
+  mongodata:

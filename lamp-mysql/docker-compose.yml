@@ -1,29 +1,18 @@
 version: '2'
 services:
-  mysqldata:
-    image: busybox
-    container_name: docker-mysqldata
-    volumes:
-     - /var/lib/mysql
   mysql:
     image: mysql
-    container_name: docker-mysql
-    stdin_open: true
-    tty: false
     ports:
-      - "33060:3306"
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: phpdata
       MYSQL_USER: user
       MYSQL_PASSWORD: password
-    volumes_from:
-      - mysqldata
+    volumes:
+      - dbdata:/var/lib/mysql
   php:
     build: ./php
-    container_name: docker-php
-    stdin_open: true
-    tty: false
     ports:
       - '8080:80'
     volumes:
@@ -40,6 +29,11 @@ services:
     environment:
       PMA_USER: root
       PMA_PASSWORD: password
+    volumes:
+      - adminsessions:/sessions
     depends_on:
       - mysql
       - php
+volumes:
+  dbdata:
+  adminsessions:
