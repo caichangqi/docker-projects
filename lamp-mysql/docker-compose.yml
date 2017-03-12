@@ -31,6 +31,7 @@ services:
       PMA_PASSWORD: password
     volumes:
       - adminsessions:/sessions
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
     depends_on:
       - mysql
       - php
